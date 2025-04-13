@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找找看：小狗在哪裡？</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background: #fffaf5;
+            font-family: 'Arial', sans-serif;
+        }
+        h1 {
+            color: #ff7b7b;
+        }
+        #game-container {
+            position: relative;
+            display: inline-block;
+            width: 90%;
+            max-width: 800px;
+        }
+        #game-image {
+            width: 100%;
+            border: 3px solid #ffb6b9;
+            border-radius: 10px;
+        }
+        .dog-spot {
+            position: absolute;
+            border: 2px solid rgba(255, 99, 71, 0.8);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .dog-spot:hover {
+            transform: scale(1.1);
+        }
+        .found {
+            background: rgba(144, 238, 144, 0.5);
+            pointer-events: none;
+            border-color: limegreen;
+        }
+        #status {
+            margin-top: 15px;
+            color: #ff6f61;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>找找看：小狗在哪裡？</h1>
+<p>點擊圖片，找到所有小狗吧！</p>
+
+<div id="game-container">
+    <img id="game-image" src="73AFA7CD-B59B-4DE5-84D4-A730A3F09F06.jpg" alt="找小狗圖片">
+
+    <!-- 假設小狗位置，座標可以根據實際圖片調整 -->
+    <div class="dog-spot" style="top: 25%; left: 30%; width: 12%; height: 12%;"></div>
+    <div class="dog-spot" style="top: 50%; left: 60%; width: 12%; height: 12%;"></div>
+    <div class="dog-spot" style="top: 70%; left: 20%; width: 12%; height: 12%;"></div>
+    <div class="dog-spot" style="top: 40%; left: 80%; width: 12%; height: 12%;"></div>
+    <div class="dog-spot" style="top: 85%; left: 45%; width: 12%; height: 12%;"></div>
+</div>
+
+<p id="status"></p>
+
+<!-- 音效 -->
+<audio id="bark-sound" src="bark.mp3" preload="auto"></audio>
+<audio id="bgm" src="bgm.mp3" preload="auto" loop></audio>
+
+<script>
+    const barkSound = document.getElementById('bark-sound');
+    const bgm = document.getElementById('bgm');
+    let foundCount = 0;
+    const totalDogs = document.querySelectorAll('.dog-spot').length;
+
+    // 開始背景音樂
+    window.addEventListener('load', () => {
+        bgm.play().catch(() => {
+            // 部分瀏覽器需要點擊互動才播放
+            document.body.addEventListener('click', () => bgm.play(), {once: true});
+        });
+    });
+
+    document.querySelectorAll('.dog-spot').forEach(spot => {
+        spot.addEventListener('click', () => {
+            if (!spot.classList.contains('found')) {
+                spot.classList.add('found');
+                foundCount++;
+                barkSound.play(); // 播放汪汪聲
+
+                if (foundCount === totalDogs) {
+                    document.getElementById('status').innerText = '全部找到啦！你好棒！';
+                } else {
+                    document.getElementById('status').innerText = `找到 ${foundCount} 隻小狗！繼續找！`;
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
